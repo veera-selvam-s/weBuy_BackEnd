@@ -1,13 +1,12 @@
 const express = require('express');
 const env = require('dotenv');
 const app = express();
-const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 
 //routes
-const authRoutes = require ('./routes/auth');
-const adminRoutes = require ('./routes/admin/auth');
-
+const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin/auth');
+const categoryRoutes = require ('./routes/category')
 
 //environment variable or const
 env.config();
@@ -24,25 +23,25 @@ env.config();
 // .catch(error => console.error(error.message));
 
 //local connection
-mongoose.connect(`mongodb://127.0.0.1:27017/`, 
-{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-     
-}).then(() => {
-    console.log('Connection estabislished with MongoDB');
-})
-.catch(error => console.error(error.message));
+mongoose.connect(`mongodb://127.0.0.1:27017/`,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+
+    }).then(() => {
+        console.log('Connection estabislished with MongoDB');
+    })
+    .catch(error => console.error(error.message));
 
 
 //middleware
-app.use(bodyParser());
-app.use('/api',authRoutes);
-app.use('/api',adminRoutes);
-
+app.use(express.json());
+app.use('/api', authRoutes);
+app.use('/api', adminRoutes);
+app.use('/api', categoryRoutes);
 
 
 //listen - start server
-app.listen(process.env.PORT,()=>{
+app.listen(process.env.PORT, () => {
     console.log(`server is running on port ${process.env.PORT} `);
 });
