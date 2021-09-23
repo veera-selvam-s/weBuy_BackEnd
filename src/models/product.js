@@ -1,50 +1,43 @@
 const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
+    name: { 
+        type: String, 
+        required: true, 
+        trim: true 
     },
-    slug: {
-        type: String,
-        required: true,
-        unique: true,
+    slug: { 
+        type: String, 
+        required: true, 
+        unique: true 
     },
-    type: {
-        type: String,
+    price: { 
+        type: Number, 
+        required: true 
     },
-    categoryImage: { type: String },
-    price: {
+    quantity: {
         type: Number,
-        required: true,
+        required: true
     },
     description: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
     },
-    offer: {
-        type: Number,
-        productPicture: [
-            {
-                img: { type: String }
-            }
-        ],
-        reviews: [
-            {
-                userId: {type:mongoose.Schema.Types.ObjectId, ref: 'User'},
-                review: String
-            }
-        ],
-        createdBy: {
-            type: mongoose.Schema.Types.ObjectId, ref: 'user'
-        },
-        upsatedAt: Date,
-    }
-    // createdBy: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
-}, ({ timestamps: true }));
+    offer: { type: Number },
+    productPictures: [
+        { img: { type: String } }
+    ],
+    reviews: [
+        {
+            userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+            review: String
+        }
+    ],
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    updatedAt: Date,
+
+}, { timestamps: true });
+
+
 module.exports = mongoose.model('Product', productSchema);

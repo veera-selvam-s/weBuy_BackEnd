@@ -1,12 +1,12 @@
 const Product = require('../models/product');
 const shortid = require('shortid');
-const slugify = require('slugify')
+const slugify = require('slugify');
 
 exports.createProduct = (req, res) => {
     //res.status(200).json({ file: req.files, body: req.body });
 
     const {
-      name,price,description,category,createdBy
+      name,price,description,category,quantity,createdBy
     } = req.body;
     let productPictures =[];
 
@@ -17,11 +17,12 @@ exports.createProduct = (req, res) => {
     }
 
     const product = new Product({
-      name: req.body.name,
+      name: name,
       slug: slugify(name),
       price,
       description,
       productPictures,
+      quantity,
       category,
       createdBy:req.user._id
     });
