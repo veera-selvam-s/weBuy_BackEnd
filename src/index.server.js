@@ -8,16 +8,17 @@ const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin/auth');
 const categoryRoutes = require ('./routes/category');
 const productRoutes = require ('./routes/product');
+const cartRoutes = require ('./routes/cart');
 
 //environment variable or const
 env.config();
 
 //mongodb connection cloud
 //`mongodb+srv://root:<password>@cluster0.mfxqr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
-mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.mfxqr.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`, 
+mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.mfxqr.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`,
 {
     useNewUrlParser: true,
-    useUnifiedTopology: true,  
+    useUnifiedTopology: true,
 }).then(() => {
     console.log('Connection estabislished with MongoDB');
 })
@@ -41,6 +42,7 @@ app.use('/api', authRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', productRoutes);
+app.use('/api', cartRoutes);
 
 
 //listen - start server
