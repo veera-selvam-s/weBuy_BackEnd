@@ -8,11 +8,11 @@ exports.addItemToCart=(req,res)=>{
       //if cart already exsist then update cart by quantity
       //res.status(200).json({message:cart});
       const product = req.body.cartItems.product;
-      const item =cart.cartItems.find(c=>c.product == product);
+      const item =cart.cartItems.find(c=>c.product == product)
       if(item){
         Cart.findOneAndUpdate({user:req.user._id,"cartItems.product":product},{
           "$set":{
-            "cartItems":{
+            "cartItems.$":{
               ...req.body.cartItems,
               quantity:item.quantity + req.body.cartItems.quantity
             }
