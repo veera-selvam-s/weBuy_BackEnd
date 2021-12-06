@@ -3,6 +3,7 @@ const env = require('dotenv');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 
 //routes
 const authRoutes = require('./routes/auth');
@@ -38,6 +39,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO
 
 
 //middleware
+app.use(cors());
 app.use(express.json());
 app.use('/public',express.static(path.join(__dirname,'uploads')));
 app.use('/api', authRoutes);
