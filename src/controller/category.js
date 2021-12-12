@@ -4,6 +4,7 @@ const slugify = require('slugify');
 function createCategories(categories, parentId = null) {
     const categoryList = [];
     let category;
+	console.log("[+]Request to createCategories");
     if (parentId == null) {
         category = categories.filter((cat) => cat.parentId == undefined);
     } else {
@@ -18,11 +19,13 @@ function createCategories(categories, parentId = null) {
             children: createCategories(categories, cate._id),
         });
     }
+	console.log("[+]Success from createCategories");
 
     return categoryList;
 }
 
 exports.addcategory = (req, res) => {
+	console.log("[+]Request to add category ")
     let categoryUrl;
     
     const categoryObj = {
@@ -40,18 +43,29 @@ exports.addcategory = (req, res) => {
 
     const cat = new Category(categoryObj);
     cat.save((error, category) => {
-        if (error) return res.status(400).json({ error });
-        if (category) return res.status(201).json({ category })
+        if (error){
+			console.log("[+]error:400 from add category ")
+			return res.status(400).json({ error });
+		} 
+        if (category){
+			console.log("[+]success category added")
+			return res.status(201).json({ category })
+		} 
     })
 
 }
 exports.getCategories = (req, res) => {
+	console.log("[+]Request to getCategories");
     Category.find({})
         .exec((error, categories) => {
-            if (error) return res.status(400).json({ error });
+            if (error){
+				console.log("[+]Error from getCategories");
+				return res.status(400).json({ error });
+			} 
             if (categories) {
                 const categoryList = createCategories(categories);
                 res.status(200).json({ categoryList });
             }
         });
+	console.log("[+]Success fromgetCategory");
 }
