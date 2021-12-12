@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
+const compression = require('compression')
 
 //routes
 const authRoutes = require('./routes/auth');
@@ -39,6 +40,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO
 
 
 //middleware
+app.use(compression({ level:6 }))
 app.use(cors());
 app.use(express.json());
 app.use('/public',express.static(path.join(__dirname,'uploads')));

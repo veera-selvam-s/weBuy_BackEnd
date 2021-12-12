@@ -12,13 +12,15 @@ function createCategories(categories, parentId = null) {
     }
 
     for (let cate of category) {
-        categoryList.push({
-            _id: cate._id,
-            name: cate.name,
-            slug: cate.slug,
-            children: createCategories(categories, cate._id),
-        });
-    }
+    categoryList.push({
+      _id: cate._id,
+      name: cate.name,
+      slug: cate.slug,
+      parentId: cate.parentId,
+      type: cate.type,
+      children: createCategories(categories, cate._id),
+    });
+  } 
 	console.log("[+]Success from createCategories");
 
     return categoryList;
