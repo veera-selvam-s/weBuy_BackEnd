@@ -1,30 +1,29 @@
 const Category = require('../models/category');
 const slugify = require('slugify');
 
-function createCategories(categories, parentId = null) {
+function createCategories(categories, parentId = null){
+
     const categoryList = [];
     let category;
-	console.log("[+]Request to createCategories");
-    if (parentId == null) {
-        category = categories.filter((cat) => cat.parentId == undefined);
-    } else {
-        category = categories.filter((cat) => cat.parentId == parentId);
+    if(parentId == null){
+        category = categories.filter(cat => cat.parentId == undefined);
+    }else{
+        category = categories.filter(cat => cat.parentId == parentId);
     }
 
-    for (let cate of category) {
-    categoryList.push({
-      _id: cate._id,
-      name: cate.name,
-      slug: cate.slug,
-      parentId: cate.parentId,
-      type: cate.type,
-      children: createCategories(categories, cate._id),
-    });
-  } 
-	console.log("[+]Success from createCategories");
+    for(let cate of category){
+        categoryList.push({
+            _id: cate._id,
+            name: cate.name,
+            slug: cate.slug,
+            parentId: cate.parentId,
+            children: createCategories(categories, cate._id)
+        });
+    }
 
     return categoryList;
-}
+
+};
 
 exports.addcategory = (req, res) => {
 	console.log("[+]Request to add category ")
