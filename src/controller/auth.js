@@ -24,11 +24,11 @@ exports.signup = (req, res) => {
             } = req.body;
             const hash_password = await bcrypt.hash(password, 10);
             const _user = new User({
-                firstName,
-                lastName,
-                email,
-                hash_password,
-                username: Math.random().toString()
+              firstName,
+              lastName,
+              email,
+              hash_password,
+              username: shortid.generate()
             });
 
             _user.save((error, data) => {
