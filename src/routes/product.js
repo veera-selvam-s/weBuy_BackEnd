@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireSignin, adminMiddleware } = require('../common-middleware/index');
-const { createProduct,getProductsBySlug } = require('../controller/product');
+const { createProduct, getProductsBySlug } = require("../controller/product");
 // const { addcategory, getCategories } = require("../controller/category")
 
 const multer = require('multer');
