@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-//schema
+
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -38,33 +38,28 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['user', 'admin'],
-        default: 'user'
+        default:'user'
     },
-    contactNumber: {
-        type: String
-    },
-    profilePicture: {
-        type: String
-    }
-}, {
-    timestamps: true
-});
-// pasword function
+    contactNumber: { type: String },
+    pofilePicture: { type: String }
+}, { timestamps: true });
+
+
 // userSchema.virtual('password')
-//     .set(function (password) {
-//         this.hash_password = bcrypt.hashSync(password, 10);
-//     });
+// .set(function(password){
+//     this.hash_password = bcrypt.hashSync(password, 10);
+// });
 
 userSchema.virtual('fullName')
-    .get(function () {
-        return `${this.firstName} ${this.lastName}`
-    });
+.get(function(){
+    return `${this.firstName} ${this.lastName}`;
+});
 
-//authentication function
 userSchema.methods = {
-  authenticate: async function (password) {
-    return await bcrypt.compare(password, this.hash_password);
-  }
-};
+    authenticate: async function(password){
+        return await bcrypt.compare(password, this.hash_password);
+    }
+}
+
 
 module.exports = mongoose.model('User', userSchema);

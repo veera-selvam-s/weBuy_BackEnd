@@ -4,95 +4,77 @@ const bcrypt = require("bcrypt");
 const shortid = require("shortid");
 
 exports.signup = (req, res) => {
-  console.log("[+]Request to signup");
-  User.findOne({
-    email: req.body.email
-  }).exec(async (error, user) => {
-    if (user)
-      return res.status(400).json({
-        message: "admin already registered"
+  User.findOne({ email: req.body.email })
+  .exec(async (error, user) => {
+      if(user) return res.status(400).json({
+          message: 'Admin already registered'
       });
-    //destucture req body
-    const { firstName, lastName, email, password } = req.body;
-    const hash_password = await bcrypt.hash(password, 10);
 
-    const _user = new User({
-      firstName,
-      lastName,
-      email,
-      hash_password,
-      password,
-      username: shortid.generate(),
-      role: "admin"
-    });
-
-    _user.save((error, data) => {
-      if (error) {
-        console.log("[+]Error from saving signup");
-        return res.status(400).json({
-          message: "something went wrong"
-        });
-      }
-      if (data) {
-        console.log("[+]Success from signup");
-        return res.status(201).json({
-          message: "Admin created successfully..!"
-        });
-      }
-    });
-
-    if (error) {
-      return res.status(400).json({
-        message: "error accured"
+      const {
+          firstName,
+          lastName,
+          email,
+          password
+      } = req.body;
+      const hash_password = await bcrypt.hash(password, 10);
+      const _user = new User({ 
+          firstName, 
+          lastName, 
+          email, 
+          hash_password,
+          username: shortid.generate(),
+          role: 'admin'
       });
-    }
+
+      _user.save((error, data) => {
+          if(error){
+              return res.status(400).json({
+                  message: 'Something went wrong'
+              });
+          }
+
+          if(data){
+              return res.status(201).json({
+                  message: 'Admin created Successfully..!'
+              })
+          }
+      });
+
+
+
   });
-};
+}
 
 exports.signin = (req, res) => {
-  console.log("[+]Request to signin");
-  User.findOne({ email: req.body.email }).exec((error, user) => {
-    if (error) return res.status(400).json({ error });
-    if (user) {
-      if (user.authenticate(req.body.password) && user.role === "admin") {
-        const token = jwt.sign(
-          { _id: user._id, role: user.role },
-          process.env.JWT_SECRET,
-          { expiresIn: "30d" }
-        );
-        const { _id, firstName, lastName, email, role, fullName } = user;
-        res.cookie("token", token, { expiresIn: "30d" });
-        res.status(200).json({
-          token,
-          user: {
-            _id,
-            firstName,
-            lastName,
-            email,
-            role,
-            fullName
-          }
-        });
-        console.log("[+]Success from Signin");
-      } else {
-        console.log("[+]Error from Signin");
-        return res.status(400).json({
-          message: "invalid password"
-        });
-      }
-    } else {
-      console.log("[+]Error from Signin");
-      return res.status(400).json({ message: "something went wrong" });
-    }
-  });
-};
+  User.findOne({ email: req.body.email })
+  .exec((error, user) => {
+      if(error) return res.status(400).json({ error });
+      if(user){
 
-//signout
-exports.signout = (req, res) => {
-  console.log("[+]Request to Signout");
-  res.clearCookie("token");
-  res.status(200).json({
-    message: "sign out successfully"
+          if(user.authenticate(req.body.password) && user.role === 'admin'){
+              const token = jwt.sign({_id: user._id, role: user.role}, process.env.JWT_SECRET, { expiresIn: '1d' });
+              const { _id, firstName, lastName, email, role, fullName } = user;
+              res.cookie('token', token, { expiresIn: '1d' });
+              res.status(200).json({
+                  token,
+                  user: {_id, firstName, lastName, email, role, fullName}
+              });
+          }else{
+              return res.status(400).json({
+                  message: 'Invalid Password'
+              })
+          }
+
+      }else{
+          return res.status(400).json({message: 'Something went wrong'});
+      }
   });
-  console.log("[+]Success from Signout");
-};
+}
+
+
+exports.signout = (req, res) => {
+  res.clearCookie('token');
+  res.status(200).json({
+      message: 'Signout successfully...!'
+  })
+}
