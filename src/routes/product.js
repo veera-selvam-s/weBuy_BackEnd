@@ -1,6 +1,10 @@
 const express = require('express');
 const { requireSignin, adminMiddleware } = require('../common-middleware/index');
-const { createProduct, getProductsBySlug, getProductDetailsById } = require("../controller/product");
+const {createProduct,
+  getProductsBySlug,
+  getProductDetailsById,
+  deleteProductById,
+  getProducts, } = require("../controller/product");
 // const { addcategory, getCategories } = require("../controller/category")
 
 const multer = require('multer');
@@ -19,8 +23,27 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-router.post('/product/create', requireSignin, adminMiddleware, upload.array('productPicture'),createProduct);
-router.get('/products/:slug', getProductsBySlug)
-// router.get('/category/getCategory', getCategories);
-router.get('/product/:productId', getProductDetailsById);
+router.post(
+  "/product/create",
+  requireSignin,
+  adminMiddleware,
+  upload.array("productPicture"),
+  createProduct
+);
+router.get("/products/:slug", getProductsBySlug);
+//router.get('/category/getcategory', getCategories);
+router.get("/product/:productId", getProductDetailsById);
+router.delete(
+  "/product/deleteProductById",
+  requireSignin,
+  adminMiddleware,
+  deleteProductById
+);
+router.post(
+  "/product/getProducts",
+  requireSignin,
+  adminMiddleware,
+  getProducts
+);
+
 module.exports = router;
