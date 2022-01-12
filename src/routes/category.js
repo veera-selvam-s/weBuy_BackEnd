@@ -16,8 +16,9 @@ const storage = multer.diskStorage({
   });
   const upload = multer({ storage });
 
-router.post('/category/create', requireSignin, adminMiddleware, upload.single('categoryImage'), addcategory);
-router.get('/category/getCategory', getCategories);
-router.post('/category/update', upload.array('categoryImage'), updateCategories);
-router.post('/category/delete', deleteCategories);
+  router.post('/category/create', requireSignin, adminMiddleware, upload.single('categoryImage'), addcategory);
+  router.get('/category/getcategory', getCategories);
+  router.post('/category/update', upload.array('categoryImage'), updateCategories);
+  router.post('/category/delete', deleteCategories);
+  
 module.exports = router;
